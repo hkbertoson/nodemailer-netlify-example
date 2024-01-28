@@ -13,9 +13,9 @@ Set form action to / fetch `https://yourdomain.netlify.app/.netlify/functions/ex
 
 Use either a gmail account with app password or an actual SMTP server
 
-This project structure will work if you want to simply clone this template and edit it. However you don't need to use this project structure, you can set up the netlify function however you want. It will probably be easier to just use the example.js 
+This project structure will work if you want to simply clone or use deploy with netlify button. However you don't need to use this project structure, you can set up the netlify function however you want.
 
-The TS version can be used by setting the netlify build command to `pnpm run build`
+The TS version can be used by setting the netlify build command to `pnpm run build` or by building locally and copying [/netlify/functions/example.js](/netlify/functions/example.js) into your own repo.
 
 This function will take about 1 second to send an email (even on a "hot" start)
 
