@@ -17,11 +17,38 @@ This project structure will work if you want to simply clone this template and e
 
 The TS version can be used by setting the netlify build command to `pnpm run build`
 
+This function will take about 1 second to send an email (even on a "hot" start)
+
 ## Creating App Password
 
 [Create Gmail App Password](https://security.google.com/settings/security/apppasswords)
 
-## Deploy to netlify
+## SMTP Config
+
+1. Standard SMTP
+```js
+const emailConfig = {
+  host: process.env.HOST,
+  port: process.env.PORT,
+  auth: {
+    user: process.env.USERNAME,
+    pass: process.env.PASSWORD,
+  }
+}
+```
+2. Gmail App Password
+```js
+const emailConfig = {
+  service: "gmail",
+  auth: {
+    user: env.EMAIL,
+    pass: env.PASSWORD,
+  },
+}
+```
+3. [OAuth2](https://nodemailer.com/smtp/oauth2/)
+
+## Manually deploy to netlify
 
 1. Clone this repo
 2. "Add new site"
@@ -31,3 +58,9 @@ The TS version can be used by setting the netlify build command to `pnpm run bui
 6. Add Environmental Variables
 7. Deploy and view logs at Logs in Left Sidear then Functions then Select example
 8. Set form action / fetch `https://domain.netlify.app/.netlify/functions/example`
+
+
+## Resources
+
+1. [Nodemailer Docs](https://nodemailer.com/)
+2. [Netlify Functions Docs](https://docs.netlify.com/functions/overview/)
