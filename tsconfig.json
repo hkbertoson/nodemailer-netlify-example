@@ -1,0 +1,8 @@
+{
+  "compilerOptions": {
+    "target": "es2020",
+    "moduleResolution": "node",
+    "outDir": "./netlify/functions"
+  },
+  "include": ["src/example.ts"]
+}
