@@ -2,13 +2,13 @@ import type { Options as SMTPTransportOptions } from "nodemailer/lib/smtp-transp
 import type { SendMailOptions } from "nodemailer";
 import * as nodemailer from "nodemailer";
 
-export type ValidationRule = {
+type ValidationRule = {
   field: string;
   validator: (value: string | undefined) => boolean;
   errorMessage: string;
 };
 
-export const validationRules: ValidationRule[] = [
+const validationRules: ValidationRule[] = [
   {
     field: "email",
     validator: (value) => typeof value === "string" && value.trim().length > 0,
@@ -58,10 +58,8 @@ export const isValid = (
 
 /**
  * Trims a string and ensures it is not empty.
- * @param {unknown} value - The value to process.
- * @returns {string | undefined} - Returns the trimmed string or undefined if the input is not a string or is empty.
  */
-export const getTrimmedNonEmptyString = (
+const getTrimmedNonEmptyString = (
   value: unknown
 ): string | undefined => {
   if (typeof value === "string") {
@@ -119,19 +117,20 @@ export const parseRequestBody = (
 /**
  * Sends an email using the provided payload and configuration.
  * The email configuration is defined in example.ts as `emailConfig`.
+ * @see {@link mailOptions} - to add in your own custom email HTML
  * @param {RequestPayload} payload - The payload containing the email details.
- * @param {string} origin - The origin of the request.
  * @param {boolean} isJson - Indicates if the response should be in JSON format (if the form is submitted with or without js).
  * @param {Record<string, string>} headers - The headers to include in the response.
  * @param {SMTPTransportOptions} emailConfig - Defined at top of example.ts based on env variables for the SMTP transport configuration.
+ * @param {redirects} redirects - Defined at top of handler function in example.ts, used for forms submitted without JS.
  * @returns {Promise<{statusCode: number, headers: Record<string, string>, body: string}>} - Returns a promise that resolves to the response object.
  */
 export const sendEmail = async (
   payload: Record<string, string>,
-  origin: string,
   isJson: boolean,
   headers: Record<string, string>,
-  emailConfig: SMTPTransportOptions
+  emailConfig: SMTPTransportOptions,
+  redirects: Record<"success" | "error", string>,
 ): Promise<{
   statusCode: number;
   headers: Record<string, string>;
@@ -155,7 +154,7 @@ export const sendEmail = async (
         }
       : {
           statusCode: 303,
-          headers: { ...headers, Location: `${origin}/#success` },
+          headers: { ...headers, Location: redirects.success },
           body: "",
         };
   } catch (error) {
@@ -168,7 +167,7 @@ export const sendEmail = async (
         }
       : {
           statusCode: 303,
-          headers: { ...headers, Location: `${origin}/#error` },
+          headers: { ...headers, Location: redirects.error },
           body: "",
         };
   }

@@ -30,6 +30,10 @@ const allowedOrigins = env.ALLOWED_ORIGINS.split(",").filter(Boolean);
 export const handler: Handler = async (event) => {
   const origin = event.headers.origin;
   const isJson = event.headers["content-type"] === "application/json";
+  const redirects = {
+    success: `${origin}/#success`,
+    error: `${origin}/#error`,
+  } satisfies Record<"success" | "error", string>;
   let headers = {
     "Access-Control-Allow-Headers": "Content-Type",
     "Access-Control-Allow-Methods": "POST, OPTIONS",
@@ -73,11 +77,11 @@ export const handler: Handler = async (event) => {
       ? {
           statusCode: 400,
           headers,
-          body: JSON.stringify({ errors: errorMessages }),
+          body: JSON.stringify({ error: errorMessages }),
         }
       : {
           statusCode: 303,
-          headers: { ...headers, Location: `${origin}/#error` },
+          headers: { ...headers, Location: redirects.error },
           body: "",
         };
   }
@@ -91,10 +95,10 @@ export const handler: Handler = async (event) => {
         }
       : {
           statusCode: 303,
-          headers: { ...headers, Location: `${origin}/#error` },
+          headers: { ...headers, Location: redirects.error },
           body: "",
         };
   }
 
-  return sendEmail(payload, origin, isJson, headers, emailConfig);
+  return sendEmail(payload, isJson, headers, emailConfig, redirects);
 };
