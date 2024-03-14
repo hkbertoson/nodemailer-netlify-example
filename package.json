@@ -5,7 +5,7 @@
 		"@rollup/plugin-node-resolve": "^15.2.3",
 		"@rollup/plugin-terser": "^0.4.4",
 		"@rollup/plugin-typescript": "^11.1.6",
-		"nodemailer": "^6.9.8",
+		"nodemailer": "^6.9.9",
 		"rollup": "^4.9.6",
 		"terser": "^5.27.0",
 		"tslib": "^2.6.2",
